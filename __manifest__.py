@@ -9,6 +9,6 @@
         # # Settaggi per accesso ai contenuti
         'data/ir.model.access.csv',
         # # Caricamento delle view,
-        'view/fleet_vehicle_log_service_update.xml',
+        'view/fleet_vehicle_log_contract_update.xml',
     ],
 }
