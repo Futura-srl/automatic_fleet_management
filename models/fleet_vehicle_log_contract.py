@@ -17,16 +17,17 @@ class FleetVehicleLogContract(models.Model):
         new_contract = super(FleetVehicleLogContract, self).create(values)
 
         # Chiamiamo la tua funzione personalizzata per il nuovo contratto
-        _logger.info('HO CREATO IL RECORD')  
-        _logger.info(values)  
-        _logger.info(values['organization_id'])  
-        _logger.info(new_contract.id)  
-        _logger.info('TEST 1')  
+        _logger.info('HO CREATO IL RECORD')  # Sostituisci con il nome della tua funzione
+        _logger.info(values)  # Sostituisci con il nome della tua funzione
+        _logger.info(values['organization_id'])  # Sostituisci con il nome della tua funzione
+        _logger.info(new_contract.id)  # Sostituisci con il nome della tua funzione
+        _logger.info('TEST 1')  # Sostituisci con il nome della tua funzione
         record = self.env['fleet.vehicle.log.contract'].search_read([('id', '=', new_contract.id)])
-        _logger.info('TEST 2')  
-        _logger.info(record)  
-        _logger.info(record[0]['vehicle_id'][0])  
+        _logger.info('TEST 2')  # Sostituisci con il nome della tua funzione
+        _logger.info(record)  # Sostituisci con il nome della tua funzione
+        _logger.info(record[0]['vehicle_id'][0])  # Sostituisci con il nome della tua funzione
         
+
         if values['cost_subtype_id'] == 47:
             veicolo = self.env['fleet.vehicle'].browse(record[0]['vehicle_id'][0])
             veicolo.write({'organization_id': values['organization_id']})
