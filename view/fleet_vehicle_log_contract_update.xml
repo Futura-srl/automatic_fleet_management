@@ -4,12 +4,17 @@
 
     <!-- Relativo alla visualizzazione della tabella ad alberlo -->
     <record id="fleet_vehicle_log_contract_view_form_inherit_2" model="ir.ui.view">
-        <field name="name">fleet.vehicle.log.contract.view.form.inherit.3</field>
+        <field name="name">fleet.vehicle.log.contract.view.form.inherit.2</field>
         <field name="model">fleet.vehicle.log.contract</field>
         <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='service_ids']" position="after">
                 <field name="organization_id"/>
+            </xpath>
+            <xpath expr="//field[@name='cost_subtype_id']" position="replace">
+                <field name="create_date" invisible="1"/>
+                # Il campo deve essere readonly solo dopo aver creato il record altrimenti alla creazione non viene passato il valore della field.
+                <field name="cost_subtype_id" attrs="{'readonly': [('cost_subtype_id', '!=', False), ('create_date', '!=', False)]}"/>
             </xpath>
         </field>
     </record>
