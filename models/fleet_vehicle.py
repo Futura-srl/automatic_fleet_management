@@ -40,146 +40,62 @@ class FleetVehicle(models.Model):
         bloccati = self.env['fleet.vehicle.log.services'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '!=', 'done'), ('block_trip_assignment', '=', True)])
         sostituzione = self.env['fleet.replacement'].search_read([('replacement_fleet_id.id', '=', vehicle.id), ('replacement_start_date', '<', today), '|', ('replacement_end_date', '=', False), ('replacement_end_date', '>', today)])
         in_riparazione = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [11,45,46,47])])
-
-        #######################
-        contratti_disp_chiusi = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['closed','expired']), ('cost_subtype_id.id', 'in', [47]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_disp_aperti = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['open']), ('cost_subtype_id.id', 'in', [47])])
-        contratti_disp_no = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id),('cost_subtype_id.id', 'in', [47]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_disp_all = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id),('cost_subtype_id.id', 'in', [47]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_noleggio_proprieta_chiusi = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['closed','expired']), ('cost_subtype_id.id', 'in', [11,45]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_noleggio_proprieta_aperti = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['open']), ('cost_subtype_id.id', 'in', [11,45])])
-        contratti_noleggio_chiusi = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['closed','expired']), ('cost_subtype_id.id', 'in', [11]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_noleggio_aperti = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['open']), ('cost_subtype_id.id', 'in', [11])])
-        contratti_scorta_chiusi = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['closed','expired']), ('cost_subtype_id.id', 'in', [46]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_scorta_aperti = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['open']), ('cost_subtype_id.id', 'in', [46])])
-        contratti_noleggio_proprieta_scorta_chiusi = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['closed','expired']), ('cost_subtype_id.id', 'in', [11,45,46]), '|', ('active', '=', True),('active', '=', False)])
-        contratti_noleggio_proprieta_scorta_aperti = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', 'in', ['open']), ('cost_subtype_id.id', 'in', [11,45,46])])
-        contratti_noleggio_proprieta_scorta_all = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('cost_subtype_id.id', 'in', [11,45,46]), '|', ('active', '=', True),('active', '=', False)])
-        bloccati = self.env['fleet.vehicle.log.services'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '!=', 'done'), ('block_trip_assignment', '=', True)])
-        sostituzione = self.env['fleet.replacement'].search_read([('replacement_fleet_id.id', '=', vehicle.id), ('replacement_start_date', '<', today), '|', ('replacement_end_date', '=', False), ('replacement_end_date', '>', today)])
-        cessato = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id),('state', 'in', ['open']), ('cost_subtype_id.id', 'in', [11,45,46,47]), '|', ('active', '=', True),('active', '=', False)])
-
-        
-
-        # if contratti_disp_chiusi != []:
-        #     _logger.info('Tutti i contratti di disponibilità sono chiusi o scaduti')
-        #     _logger.info(contratti_disp_chiusi)
-        # if contratti_disp_aperti != []:
-        #     _logger.info('Ci sono contratti di disponibilità attivi')
-        #     _logger.info(contratti_disp_aperti)
-        # if contratti_disp_no == []:
-        #     _logger.info('Non ci sono mai stati contratti di disponibilità')
-        #     _logger.info(contratti_disp_no)
-        # if contratti_noleggio_proprieta_chiusi != []:
-        #     _logger.info('Non ci sono contratti di noleggio scorta attivi')
-        # else:
-        #     _logger.info('Ci sono contratti di noleggio scorta attivi')
-
-
-        
-        # if contracts_available == []:
-        #     _logger.info('Non ci sono contratti di disponibilità attivi')
-        # else:
-        #     _logger.info('Ci sono contratti di disponibilità attivi')
-        # _logger.info(contracts_available)
-        # if contracts_rent == []:
-        #     _logger.info('Non ci sono contratti di noleggio attivi')
-        # else:
-        #     _logger.info('Ci sono contratti di noleggio attivi')
-        # _logger.info(contracts_rent)
-        # if contracts_owner == []:
-        #     _logger.info('Non ci sono contratti di proprietà attivi')
-        # else:
-        #     _logger.info('Ci sono contratti di proprietà attivi')
-        # _logger.info(contracts_owner)
-        # if contracts_rent_stock == []:
-        #     _logger.info('Non ci sono contratti di noleggio scorta attivi')
-        # else:
-        #     _logger.info('Ci sono contratti di noleggio scorta attivi')
-        # _logger.info(contracts_rent_stock)
-        # _logger.info(today)
-        # _logger.info(sostituzione)
+        if contracts_available == []:
+            _logger.info('Non ci sono contratti di disponibilità attivi')
+        else:
+            _logger.info('Ci sono contratti di disponibilità attivi')
+        _logger.info(contracts_available)
+        if contracts_rent == []:
+            _logger.info('Non ci sono contratti di noleggio attivi')
+        else:
+            _logger.info('Ci sono contratti di noleggio attivi')
+        _logger.info(contracts_rent)
+        if contracts_owner == []:
+            _logger.info('Non ci sono contratti di proprietà attivi')
+        else:
+            _logger.info('Ci sono contratti di proprietà attivi')
+        _logger.info(contracts_owner)
+        if contracts_rent_stock == []:
+            _logger.info('Non ci sono contratti di noleggio scorta attivi')
+        else:
+            _logger.info('Ci sono contratti di noleggio scorta attivi')
+        _logger.info(contracts_rent_stock)
+        _logger.info(today)
+        _logger.info(sostituzione)
 
             
-        # # Mezzi che devono essere con lo stato "In arrivo"
-        # if contracts_count > 0 and contratti_noleggio_proprieta_aperti != [] and contratti_disp_no == []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su In arrivo")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 9})
-        # # Mezzi che devono essere con lo stato "Cessato"
-        # if contracts_count > 0 and cessato == [] and contracts_available == []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su Cessato")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 11})
-        # # Mezzi che devono essere con lo stato "Flotta"
-        # if contracts_count > 0 and contracts_available != [] and flotta != [] and bloccati == []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su Flotta")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 8})
-        # # Mezzi che devono essere con lo stato "Scorta"
-        # if contracts_count > 0 and contracts_available != [] and contracts_rent_stock != []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su Scorta")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 5})
-        # # Mezzi che devono esserwe con lo stato "In riparazione"
-        # if contracts_count > 0 and contratti_disp_chiusi != [] and contratti_noleggio_proprieta_aperti != [] and riparazione != [] and bloccati == []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su In riparazione")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 13})
-        # # Mezzi che devono esserwe con lo stato "Disponibile"
-        # if contracts_count > 0 and contracts_available != [] and riparazione == [] and bloccati == [] and sostituzione == []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su Disponibile")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 12})
-        # # Mezzi che devono esserwe con lo stato "Indisponibile"
-        # if contracts_count > 0 and bloccati != [] and in_riparazione != []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su Indisponibile")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 10})
-        # # Mezzi che devono essere con lo stato "Sostituzione"
-        # if sostituzione != [] and cessato != []:
-        #     _logger.info(f"Il mezzo {vehicle.id} deve stare su Sostituzione")
-        #     veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-        #     veicolo.write({'state_id': 6})
-
-        
-        # Mezzi che devono essere con lo stato "In arrivo" - ok
-        if contratti_noleggio_proprieta_scorta_aperti != [] and contratti_disp_all == []:
-            _logger.info(f"Il mezzo {vehicle.id} deve stare su In arrivo")
-            veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-            veicolo.write({'state_id': 9})
-        # Mezzi che devono essere con lo stato "Cessato" - ok
-        if cessato == [] and contratti_disp_aperti == [] and contratti_disp_chiusi != []:
+        # Mezzi che devono essere con lo stato "Cessato"
+        if contracts_count > 0 and cessato == [] and contracts_available == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Cessato")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 11})
-        # Mezzi che devono essere con lo stato "Flotta" - ok
-        if contratti_noleggio_proprieta_aperti != [] and contratti_disp_aperti != []:
+        # Mezzi che devono essere con lo stato "Flotta"
+        if contracts_count > 0 and contracts_available != [] and flotta != [] and bloccati == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Flotta")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 8})
-        # Mezzi che devono essere con lo stato "Scorta" - ok
-        if contratti_scorta_aperti != [] and contratti_disp_aperti != []:
+        # Mezzi che devono essere con lo stato "Scorta"
+        if contracts_count > 0 and contracts_available != [] and contracts_rent_stock != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Scorta")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 5})
-        # Mezzi che devono esserwe con lo stato "In riparazione" - ok
-        if contratti_noleggio_proprieta_scorta_aperti != [] and contratti_disp_chiusi != [] and contratti_disp_aperti == []:
+        # Mezzi che devono esserwe con lo stato "In riparazione"
+        if contracts_count > 0 and contracts_available == [] and riparazione != [] and bloccati == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su In riparazione")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 13})
-        # Mezzi che devono esserwe con lo stato "Disponibile" - ok
-        if contratti_noleggio_proprieta_scorta_aperti == [] and contratti_disp_aperti != []:
+        # Mezzi che devono esserwe con lo stato "Disponibile"
+        if contracts_count > 0 and contracts_available != [] and riparazione == [] and bloccati == [] and sostituzione == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Disponibile")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 12})
-        # Mezzi che devono esserwe con lo stato "Indisponibile" - ok
-        if bloccati != []:
+        # Mezzi che devono esserwe con lo stato "Indisponibile"
+        if contracts_count > 0 and bloccati != [] and in_riparazione != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Indisponibile")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 10})
-        # Mezzi che devono essere con lo stato "Sostituzione" - ok
-        if sostituzione != []:
+        # Mezzi che devono essere con lo stato "Sostituzione"
+        if sostituzione != [] and cessato != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Sostituzione")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 6})
