@@ -9,7 +9,7 @@ class FleetVehicle(models.Model):
     _inherit = 'fleet.vehicle'
     
     
-    state_id = fields.Many2one('fleet.vehicle.state', string='Stato', default=9) # ID relativo allo stato "In arrivo" scelto come Default per la creazione dei record
+    state_id = fields.Many2one('fleet.vehicle.state', string='Stato', default=9, readonly=True) # ID relativo allo stato "In arrivo" scelto come Default per la creazione dei record
 
     @api.model
     def log_vehicle_ids(self):
