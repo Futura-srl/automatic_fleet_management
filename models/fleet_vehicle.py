@@ -79,11 +79,6 @@ class FleetVehicle(models.Model):
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Scorta")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 5})
-        # Mezzi che devono esserwe con lo stato "In riparazione"
-        if contracts_count > 0 and contracts_available == [] and riparazione != [] and bloccati == []:
-            _logger.info(f"Il mezzo {vehicle.id} deve stare su In riparazione")
-            veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-            veicolo.write({'state_id': 13})
         # Mezzi che devono esserwe con lo stato "Disponibile"
         if contracts_count > 0 and contracts_available != [] and riparazione == [] and bloccati == [] and sostituzione == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Disponibile")
@@ -94,6 +89,11 @@ class FleetVehicle(models.Model):
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Indisponibile")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 10})
+        # Mezzi che devono esserwe con lo stato "In riparazione"
+        if contracts_count > 0 and contracts_available == [] and riparazione != [] and bloccati != []:
+            _logger.info(f"Il mezzo {vehicle.id} deve stare su In riparazione")
+            veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
+            veicolo.write({'state_id': 13})
         # Mezzi che devono essere con lo stato "Sostituzione"
         if sostituzione != [] and cessato != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Sostituzione")
