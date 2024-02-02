@@ -22,10 +22,11 @@ class FleetVehicleLogServices(models.Model):
                 del data['odometer']
         res = super(FleetVehicleLogServices, self).create(vals_list)
         another_class_obj = self.env['fleet.vehicle']
-        another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].search([('id', '=', vals_list[0]['vehicle_id'])]))
-        status = self.env['fleet.vehicle'].search_read([('id', '=', vals_list[0]['vehicle_id'])])
-        state = status[0]['state_id'][1]
-        self.env.user.notify_success(message=f"Il mezzo è stato messo sullo stato: {state}")
+        for record in vals_list:
+            another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].search([('id', '=', record['vehicle_id'])]))
+            status = self.env['fleet.vehicle'].search_read([('id', '=', record['vehicle_id'])])
+            state = status[0]['state_id'][1]
+            self.env.user.notify_success(message=f"Il mezzo è stato messo sullo stato: {state}")
         return res
 
     def write(self, vals_list):
