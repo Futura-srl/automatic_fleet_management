@@ -34,7 +34,7 @@ class FleetVehicle(models.Model):
         _logger.info(f"ID del veicolo: {vehicle.id}")
         _logger.info(f"Numero contratti attivi: {contracts_count}")
         _logger.info(f"Contratti: {contracts}")
-        cessato = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [11,45,46])])
+        cessato = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [11,45,46,55])])
         flotta = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [11,45])])
         riparazione = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [11,45,46])])
         bloccati = self.env['fleet.vehicle.log.services'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '!=', 'done'), ('block_trip_assignment', '=', True)])
@@ -61,41 +61,60 @@ class FleetVehicle(models.Model):
             _logger.info('Ci sono contratti di noleggio scorta attivi')
         _logger.info(contracts_rent_stock)
         _logger.info(today)
-        _logger.info(sostituzione)
+        # _logger.info(sostituzione)
+        _logger.info(f"sostituzione = {sostituzione}")
+        _logger.info(f"riparazione = {riparazione}")
+        _logger.info(f"bloccati = {bloccati}")
+        _logger.info(f"cessato = {cessato}")
+        
 
-            
+        assegnato = ""    
         # Mezzi che devono essere con lo stato "Cessato"
         if contracts_count > 0 and cessato == [] and contracts_available == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Cessato")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 11})
+            assegnato = "cessato"
         # Mezzi che devono essere con lo stato "Flotta"
         if contracts_count > 0 and contracts_available != [] and flotta != [] and bloccati == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Flotta")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 8})
+            assegnato = "flotta"
         # Mezzi che devono essere con lo stato "Scorta"
         if contracts_count > 0 and contracts_available != [] and contracts_rent_stock != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Scorta")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 5})
+            assegnato = "scorta"
         # Mezzi che devono esserwe con lo stato "Disponibile"
         if contracts_count > 0 and contracts_available != [] and riparazione == [] and bloccati == [] and sostituzione == []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Disponibile")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 12})
+            assegnato = "disponibile"
         # Mezzi che devono esserwe con lo stato "Indisponibile"
         if contracts_count > 0 and bloccati != [] and in_riparazione != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Indisponibile")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 10})
+            assegnato = "indisponibile"
         # Mezzi che devono esserwe con lo stato "In riparazione"
         if contracts_count > 0 and contracts_available == [] and riparazione != [] and bloccati != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su In riparazione")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 13})
+            assegnato = "in riparazione"
         # Mezzi che devono essere con lo stato "Sostituzione"
         if sostituzione != [] and cessato != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Sostituzione")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
             veicolo.write({'state_id': 6})
+            assegnato = "sostituzione"
+
+
+        # PER METTERE SU DISPONIBILE
+        if assegnato == "":
+            _logger.info(f"Il mezzo {vehicle.id} non è stato assegnato a nessun gruppo. Verrà segnato in DISPONIBILE")
+            veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
+            veicolo.write({'state_id': 12})
