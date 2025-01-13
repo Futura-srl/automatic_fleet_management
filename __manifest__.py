@@ -1,6 +1,6 @@
 {
     'name': 'Automatic fleet management',
-    'version': '16',
+    'version': '17.0',
     'author': "Luca Cocozza",
     'application': True,
     'description': "Gestione automatica della flotta.",
