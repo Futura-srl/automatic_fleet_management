@@ -113,8 +113,8 @@ class FleetVehicle(models.Model):
             assegnato = "sostituzione"
 
 
-        # PER METTERE SU DISPONIBILE
+        # PER METTERE SU IN ARRIVO
         if assegnato == "":
-            _logger.info(f"Il mezzo {vehicle.id} non è stato assegnato a nessun gruppo. Verrà segnato in DISPONIBILE")
+            _logger.info(f"Il mezzo {vehicle.id} non è stato assegnato a nessun gruppo. Verrà segnato IN ARRIVO")
             veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-            veicolo.write({'state_id': 12})
+            veicolo.write({'state_id': 9})
