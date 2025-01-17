@@ -14,7 +14,7 @@
             <xpath expr="//field[@name='cost_subtype_id']" position="replace">
                 <field name="create_date" invisible="1"/>
                 # Il campo deve essere readonly solo dopo aver creato il record altrimenti alla creazione non viene passato il valore della field.
-                <field name="cost_subtype_id" readonly="[('cost_subtype_id', '!=', False), ('create_date', '!=', False)]"/>
+                <field name="cost_subtype_id" readonly="cost_subtype_id != False and create_date != False"/>
             </xpath>
         </field>
     </record>
