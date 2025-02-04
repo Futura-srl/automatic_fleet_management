@@ -1,0 +1,29 @@
+<odoo>
+    <data noupdate="1">
+        <record id="fleet_vehicle_state_in_riparazione" model="fleet.vehicle.state">
+            <field name="name">In riparazione</field>
+        </record>
+        <record id="fleet_vehicle_state_cessato" model="fleet.vehicle.state">
+            <field name="name">Cessato</field>
+        </record>
+        <record id="fleet_vehicle_state_disponibile" model="fleet.vehicle.state">
+            <field name="name">Disponibile</field>
+        </record>
+        <record id="fleet_vehicle_state_flotta" model="fleet.vehicle.state">
+            <field name="name">Flotta</field>
+        </record>
+        <record id="fleet_vehicle_state_scorta" model="fleet.vehicle.state">
+            <field name="name">Scorta</field>
+        </record>
+        <record id="fleet_vehicle_state_sostituzione" model="fleet.vehicle.state">
+            <field name="name">Sostituzione</field>
+        </record>
+        <record id="fleet_vehicle_state_in_arrivo" model="fleet.vehicle.state">
+            <field name="name">In arrivo</field>
+        </record>
+        <record id="fleet_vehicle_state_indisponibile" model="fleet.vehicle.state">
+            <field name="name">Indisponibile</field>
+        </record>
+
+    </data>
+</odoo>

@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class FleetVehicleLogContract(models.Model):
     _inherit = 'fleet.vehicle.log.contract'
     
-    organization_id = fields.Many2one('res.partner', string='Centro di costo', domain=[('type', '=', 'delivery'), ('is_company', '=', True), ('name', 'ilike', "cdc")], context="{'create': False}")
+    organization_id = fields.Many2one('res.partner', string='Centro di costo', domain=[('type', '=', 'delivery'), ('is_company', '=', True), ('name', 'ilike', "cdc")])
     expiration_date = fields.Date(
         'Contract Expiration Date',
         default=False,
@@ -40,7 +40,7 @@ class FleetVehicleLogContract(models.Model):
 
         
 
-        if values['cost_subtype_id'] == 47:
+        if values['cost_subtype_id'] == '%(maintenance_request.fleet_service_type_disponibilita_mezzo)d' : #47
             veicolo = self.env['fleet.vehicle'].browse(record[0]['vehicle_id'][0])
             veicolo.write({'organization_id': values['organization_id']})
             

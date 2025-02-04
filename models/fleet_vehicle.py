@@ -21,7 +21,7 @@ class FleetVehicle(models.Model):
     def check_vehicle_status(self,vehicle):
         today = datetime.date.today()
         # Tutti i contratti
-        contracts = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id),  ('cost_subtype_id.id', 'in', [11,45,46,47])])
+        contracts = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id),  ('cost_subtype_id.id', 'in', ['%(maintenance_request.fleet_service_type_noleggio)d', '%(maintenance_request.fleet_service_type_proprieta)d', '%(maintenance_request.fleet_service_type_noleggio_scorta)d', '%(maintenance_request.fleet_service_type_disponibilita_mezzo)d'])]) # [11,45,46,47]
         contracts_count = self.env['fleet.vehicle.log.contract'].search_count([('vehicle_id.id', '=', vehicle.id),  ('cost_subtype_id.id', 'in', [11,45,46,47])])
         # Contratti di disponibilità
         contracts_available = self.env['fleet.vehicle.log.contract'].search_read([('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', '=', 47)])
