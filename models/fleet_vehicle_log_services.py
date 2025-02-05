@@ -26,7 +26,7 @@ class FleetVehicleLogServices(models.Model):
             another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].search([('id', '=', record['vehicle_id'])]))
             status = self.env['fleet.vehicle'].search_read([('id', '=', record['vehicle_id'])])
             state = status[0]['state_id'][1]
-            self.env.user.notify_success(message=f"Il mezzo è stato messo sullo stato: {state}")
+
         return res
 
     def write(self, vals_list):
@@ -38,7 +38,7 @@ class FleetVehicleLogServices(models.Model):
                 another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].search([('id', '=', service[0]['vehicle_id'][0])]))
                 status = self.env['fleet.vehicle'].search_read([('id', '=', service[0]['vehicle_id'][0])])
                 state = status[0]['state_id'][1]
-                self.env.user.notify_success(message=f"Il mezzo è stato messo sullo stato: {state}")
+
         return res
 
     
