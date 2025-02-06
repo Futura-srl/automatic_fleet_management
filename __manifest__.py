@@ -4,7 +4,7 @@
     'author': "Luca Cocozza",
     'application': True,
     'description': "Gestione automatica della flotta.",
-    'depends': ['fleet', ],
+    'depends': ['fleet', 'maintenance_request'],
     'data': [
         # Settaggi per accesso ai contenuti
         'data/ir.model.access.csv',

@@ -45,20 +45,20 @@ class FleetVehicleLogContract(models.Model):
 
             # Controllo se c'è un documento di disponibilità in corso e nel caso viene chiuso
             contract = self.env['fleet.vehicle.log.contract'].search([('vehicle_id', '=', record[0]['vehicle_id'][0]), (
-            'cost_subtype_id', '=', '%(maintenance_requestfleet_service_type_disponibilita_mezzo)d'),
+            'cost_subtype_id', '=', '%(maintenance_request.fleet_service_type_disponibilita_mezzo)d'),
                                                                       ('expiration_date', '=', False),
                                                                       ('id', '!=', record[0]['id'])])
             contract.write({'expiration_date': datetime.now().date()})
             #self.env.user.notify_success(
                 #message='Ho chiuso il contratto di disponibilità precedentemente aperto e impostato il centro di costo sul veicolo.')
         # Se il contratto fa parte di una certa selezione procedo con la chimata della funzione di check / update stato veicolo
-        if record[0]['cost_subtype_id'][0] in [self.env.ref('maintenance_requestfleet_service_type_disponibilita_mezzo').id,
-                                               self.env.ref('maintenance_requestfleet_service_type_manutenzione_ordinaria').id,
-                                               self.env.ref('maintenance_requestfleet_service_type_manutenzione_straordinaria').id,
-                                               self.env.ref('maintenance_requestfleet_service_type_noleggio').id,
-                                               self.env.ref('maintenance_requestfleet_service_type_noleggio_scorta').id,
-                                               self.env.ref('maintenance_requestfleet_service_type_proprieta').id,
-                                               self.env.ref('maintenance_requestfleet_service_type_sinistri').id]:
+        if record[0]['cost_subtype_id'][0] in [self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id,
+                                               self.env.ref('maintenance_request.fleet_service_type_manutenzione_ordinaria').id,
+                                               self.env.ref('maintenance_request.fleet_service_type_manutenzione_straordinaria').id,
+                                               self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
+                                               self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id,
+                                               self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
+                                               self.env.ref('maintenance_request.fleet_service_type_sinistri').id]:
             another_class_obj = self.env['fleet.vehicle']
             another_class_obj.check_vehicle_status(
                 self.env['fleet.vehicle'].search([('id', '=', record[0]['vehicle_id'][0])]))
