@@ -18,5 +18,26 @@
         </field>
     </record>
 
+    <record id="fleet_vehicle_kanban_inherit" model="ir.ui.view">
+        <field name="name">Fleet Vehicle kanban inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='o_kanban_image']" position="before">
+                <div>
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_cessato)d" style="color:red; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo cessato -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_flotta)d" style="color:green; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo flotta -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_scorta)d" style="color:orange; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo scorta -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_sostituzione)d" style="color:violet; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo sostituzione -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_in_arrivo)d" style="color:gold; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo in arrivo -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_indisponibile)d" style="color:coral; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo indisponibile -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_in_riparazione)d" style="color:brown; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo in riparazione -->
+                    <field name="state_id" invisible="state_id != %(automatic_fleet_management.fleet_vehicle_state_disponibile)d" style="color:limegreen; font-weight: bold; margin-right: 1em;"/> <!-- Mezzo disponibile -->
+                    <br/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
 
 </odoo>

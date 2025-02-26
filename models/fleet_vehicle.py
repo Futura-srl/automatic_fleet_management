@@ -20,6 +20,57 @@ class FleetVehicle(models.Model):
         return self.env.ref('automatic_fleet_management.fleet_vehicle_state_in_arrivo',
                             raise_if_not_found=False)  # ID relativo allo stato "In arrivo" scelto come Default per la creazione dei record
 
+    def update_id_type_contract(self):
+        contracts = self.env['fleet.vehicle.log.contract'].sudo().search([])
+        for contract in contracts:
+            if contract.cost_subtype_id.id == 11:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_noleggio').id
+            elif contract.cost_subtype_id.id == 45:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_proprieta').id
+            elif contract.cost_subtype_id.id == 46:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id
+            elif contract.cost_subtype_id.id == 47:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id
+            elif contract.cost_subtype_id.id == 55:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_non_contrattualizzato').id
+            elif contract.cost_subtype_id.id == 5:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_manutenzione_ordinaria').id
+            elif contract.cost_subtype_id.id == 7:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_manutenzione_straordinaria').id
+            elif contract.cost_subtype_id.id == 10:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_malfunzionamenti').id
+            elif contract.cost_subtype_id.id == 8:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_multe').id
+            elif contract.cost_subtype_id.id == 9:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_sinistri').id
+            elif contract.cost_subtype_id.id == 65:
+                contract.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_leasing').id
+
+    def update_id_type_service(self):
+        services = self.env['fleet.vehicle.log.services'].sudo().search([])
+        for service in services:
+            if service.service_type_id.id == 11:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_noleggio').id
+            elif service.service_type_id.id == 45:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_proprieta').id
+            elif service.service_type_id.id == 46:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id
+            elif service.service_type_id.id == 47:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id
+            elif service.service_type_id.id == 55:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_non_contrattualizzato').id
+            elif service.service_type_id.id == 5:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_manutenzione_ordinaria').id
+            elif service.service_type_id.id == 7:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_manutenzione_straordinaria').id
+            elif service.service_type_id.id == 10:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_malfunzionamenti').id
+            elif service.service_type_id.id == 8:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_multe').id
+            elif service.service_type_id.id == 9:
+                service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_sinistri').id
+
+
     @api.model
     def log_vehicle_ids(self):
 
@@ -143,13 +194,6 @@ class FleetVehicle(models.Model):
             veicolo.write({'state_id': self.env.ref(
                 'automatic_fleet_management.fleet_vehicle_state_disponibile').id})  # 12 Disponibile
             assegnato = "disponibile"
-        # Mezzi che devono esserwe con lo stato "Indisponibile"
-        elif contracts_count > 0 and bloccati != [] and in_riparazione != []:
-            _logger.info(f"Il mezzo {vehicle.id} deve stare su Indisponibile")
-            veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
-            veicolo.write({'state_id': self.env.ref(
-                'automatic_fleet_management.fleet_vehicle_state_indisponibile').id})  # 10 Indisponibile
-            assegnato = "indisponibile"
         # Mezzi che devono esserwe con lo stato "In riparazione"
         elif contracts_count > 0 and contracts_available == [] and riparazione != [] and bloccati != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su In riparazione")
@@ -157,6 +201,14 @@ class FleetVehicle(models.Model):
             veicolo.write({'state_id': self.env.ref(
                 'automatic_fleet_management.fleet_vehicle_state_in_riparazione').id})  # 13 In riparazione
             assegnato = "in riparazione"
+        # Mezzi che devono esserwe con lo stato "Indisponibile"
+        elif contracts_count > 0 and bloccati != [] and in_riparazione != []:
+            _logger.info(f"Il mezzo {vehicle.id} deve stare su Indisponibile")
+            veicolo = self.env['fleet.vehicle'].browse(vehicle.id)
+            veicolo.write({'state_id': self.env.ref(
+                'automatic_fleet_management.fleet_vehicle_state_indisponibile').id})  # 10 Indisponibile
+            assegnato = "indisponibile"
+
         # Mezzi che devono essere con lo stato "Sostituzione"
         elif sostituzione != [] and cessato != []:
             _logger.info(f"Il mezzo {vehicle.id} deve stare su Sostituzione")
