@@ -86,21 +86,22 @@ class FleetVehicleLogContract(models.Model):
             self.activity_reschedule(['fleet.mail_act_fleet_contract_to_renew'],
                                      date_deadline=vals.get('expiration_date'), new_user_id=vals.get('user_id'))
         # Check/Update status mezzo
-        vehicle = self.env['fleet.vehicle.log.contract'].search_read([('id', '=', self.id)])
-        _logger.info("1111111111111111111111")
-        _logger.info(vehicle)
-        if vehicle and vehicle[0]['id']:
-            _logger.info("@#@#@#@#@#@#@#")
-            _logger.info(vehicle[0]['cost_subtype_id'][0])
-            if vehicle[0]['cost_subtype_id'][0] in [self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id,
-                                                    self.env.ref('maintenance_request.fleet_service_type_manutenzione_ordinaria').id,
-                                                    self.env.ref('maintenance_request.fleet_service_type_manutenzione_straordinaria').id,
-                                                    self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
-                                                    self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id,
-                                                    self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
-                                                    self.env.ref('maintenance_request.fleet_service_type_sinistri').id]:
-                another_class_obj = self.env['fleet.vehicle']
-                another_class_obj.check_vehicle_status(
-                    self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]))
-                _logger.info("FUNZIONE CHIAMATA")
+        for contract in self:
+            vehicle = self.env['fleet.vehicle.log.contract'].search_read([('id', '=', contract.id)])
+            _logger.info("1111111111111111111111")
+            _logger.info(vehicle)
+            if vehicle and vehicle[0]['id']:
+                _logger.info("@#@#@#@#@#@#@#")
+                _logger.info(vehicle[0]['cost_subtype_id'][0])
+                if vehicle[0]['cost_subtype_id'][0] in [self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id,
+                                                        self.env.ref('maintenance_request.fleet_service_type_manutenzione_ordinaria').id,
+                                                        self.env.ref('maintenance_request.fleet_service_type_manutenzione_straordinaria').id,
+                                                        self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
+                                                        self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id,
+                                                        self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
+                                                        self.env.ref('maintenance_request.fleet_service_type_sinistri').id]:
+                    another_class_obj = self.env['fleet.vehicle']
+                    another_class_obj.check_vehicle_status(
+                        self.env['fleet.vehicle'].search([('id', '=', contract.vehicle_id.id)]))
+                    _logger.info("FUNZIONE CHIAMATA")
         return res
