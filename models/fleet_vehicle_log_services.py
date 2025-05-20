@@ -33,10 +33,10 @@ class FleetVehicleLogServices(models.Model):
         res = super(FleetVehicleLogServices, self).write(vals_list)
         if 'block_trip_assignment' in vals_list and vals_list['block_trip_assignment']:
             if vals_list['block_trip_assignment'] == False or vals_list['block_trip_assignment'] == True:
-                service = self.env['fleet.vehicle.log.services'].search_read([('id', '=', self['id'])])
-                another_class_obj = self.env['fleet.vehicle']
-                another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].search([('id', '=', service[0]['vehicle_id'][0])]))
-                status = self.env['fleet.vehicle'].search_read([('id', '=', service[0]['vehicle_id'][0])])
+                service = self.env['fleet.vehicle.log.services'].sudo().search_read([('id', '=', self['id'])])
+                another_class_obj = self.env['fleet.vehicle'].sudo()
+                another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].sudo().search([('id', '=', service[0]['vehicle_id'][0])]))
+                status = self.env['fleet.vehicle'].sudo().search_read([('id', '=', service[0]['vehicle_id'][0])])
                 state = status[0]['state_id'][1]
 
         return res
