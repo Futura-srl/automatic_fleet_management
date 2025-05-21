@@ -21,10 +21,10 @@ class FleetVehicleLogServices(models.Model):
                 # odometer log with 0, which is to be avoided
                 del data['odometer']
         res = super(FleetVehicleLogServices, self).create(vals_list)
-        another_class_obj = self.env['fleet.vehicle']
+        another_class_obj = self.env['fleet.vehicle'].sudo()
         for record in vals_list:
             another_class_obj.check_vehicle_status(self.env['fleet.vehicle'].search([('id', '=', record['vehicle_id'])]))
-            status = self.env['fleet.vehicle'].search_read([('id', '=', record['vehicle_id'])])
+            status = self.env['fleet.vehicle'].sudo().search_read([('id', '=', record['vehicle_id'])])
             state = status[0]['state_id'][1]
 
         return res
