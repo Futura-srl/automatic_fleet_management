@@ -100,7 +100,7 @@ class FleetVehicleLogContract(models.Model):
                                                         self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id,
                                                         self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
                                                         self.env.ref('maintenance_request.fleet_service_type_sinistri').id]:
-                    another_class_obj = self.env['fleet.vehicle']
+                    another_class_obj = self.env['fleet.vehicle'].sudo()
                     another_class_obj.check_vehicle_status(
                         self.env['fleet.vehicle'].search([('id', '=', contract.vehicle_id.id)]))
                     _logger.info("FUNZIONE CHIAMATA")
