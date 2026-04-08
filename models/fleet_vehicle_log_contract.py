@@ -29,15 +29,15 @@ class FleetVehicleLogContract(models.Model):
         new_contract = super(FleetVehicleLogContract, self).create(values)
 
         # Chiamiamo la tua funzione personalizzata per il nuovo contratto
-        _logger.info('HO CREATO IL RECORD')  # Sostituisci con il nome della tua funzione
-        _logger.info(values)  # Sostituisci con il nome della tua funzione
-        _logger.info(values['organization_id'])  # Sostituisci con il nome della tua funzione
-        _logger.info(new_contract.id)  # Sostituisci con il nome della tua funzione
-        _logger.info('TEST 1')  # Sostituisci con il nome della tua funzione
+        # _logger.info('HO CREATO IL RECORD')  # Sostituisci con il nome della tua funzione
+        # _logger.info(values)  # Sostituisci con il nome della tua funzione
+        # _logger.info(values['organization_id'])  # Sostituisci con il nome della tua funzione
+        # _logger.info(new_contract.id)  # Sostituisci con il nome della tua funzione
+        # _logger.info('TEST 1')  # Sostituisci con il nome della tua funzione
         record = self.env['fleet.vehicle.log.contract'].search_read([('id', '=', new_contract.id)])
-        _logger.info('TEST 2')  # Sostituisci con il nome della tua funzione
-        _logger.info(record)  # Sostituisci con il nome della tua funzione
-        _logger.info(record[0]['vehicle_id'][0])  # Sostituisci con il nome della tua funzione
+        # _logger.info('TEST 2')  # Sostituisci con il nome della tua funzione
+        # _logger.info(record)  # Sostituisci con il nome della tua funzione
+        # _logger.info(record[0]['vehicle_id'][0])  # Sostituisci con il nome della tua funzione
 
         if values['cost_subtype_id'] == self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id:
             veicolo = self.env['fleet.vehicle'].browse(record[0]['vehicle_id'][0])
@@ -88,11 +88,11 @@ class FleetVehicleLogContract(models.Model):
         # Check/Update status mezzo
         for contract in self:
             vehicle = self.env['fleet.vehicle.log.contract'].search_read([('id', '=', contract.id)])
-            _logger.info("1111111111111111111111")
-            _logger.info(vehicle)
+            # _logger.info("1111111111111111111111")
+            # _logger.info(vehicle)
             if vehicle and vehicle[0]['id']:
-                _logger.info("@#@#@#@#@#@#@#")
-                _logger.info(vehicle[0]['cost_subtype_id'][0])
+                # _logger.info("@#@#@#@#@#@#@#")
+                # _logger.info(vehicle[0]['cost_subtype_id'][0])
                 if vehicle[0]['cost_subtype_id'][0] in [self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id,
                                                         self.env.ref('maintenance_request.fleet_service_type_manutenzione_ordinaria').id,
                                                         self.env.ref('maintenance_request.fleet_service_type_manutenzione_straordinaria').id,
@@ -103,5 +103,5 @@ class FleetVehicleLogContract(models.Model):
                     another_class_obj = self.env['fleet.vehicle'].sudo()
                     another_class_obj.check_vehicle_status(
                         self.env['fleet.vehicle'].search([('id', '=', contract.vehicle_id.id)]))
-                    _logger.info("FUNZIONE CHIAMATA")
+                    # _logger.info("FUNZIONE CHIAMATA")
         return res

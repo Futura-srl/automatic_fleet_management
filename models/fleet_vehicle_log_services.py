@@ -13,7 +13,7 @@ class FleetVehicleLogServices(models.Model):
     
     @api.model_create_multi
     def create(self, vals_list):
-        _logger.info("KKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+        # _logger.info("KKKKKKKKKKKKKKKKKKKKKKKKKKKK")
         for data in vals_list:
             if 'odometer' in data and not data['odometer']:
                 # if received value for odometer is 0, then remove it from the

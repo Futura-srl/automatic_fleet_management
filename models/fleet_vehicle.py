@@ -69,6 +69,8 @@ class FleetVehicle(models.Model):
                 service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_multe').id
             elif service.service_type_id.id == 9:
                 service.service_type_id = self.env.ref('maintenance_request.fleet_service_type_sinistri').id
+            elif service.cost_subtype_id.id == 65:
+                service.cost_subtype_id = self.env.ref('maintenance_request.fleet_service_type_leasing').id
 
 
     @api.model
@@ -117,14 +119,17 @@ class FleetVehicle(models.Model):
                 self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
                 self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
                 self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id,
+                self.env.ref('maintenance_request.fleet_service_type_leasing').id,
                 self.env.ref('maintenance_request.fleet_service_type_non_contrattualizzato').id])])  # [11,45,46,55]
         flotta = self.env['fleet.vehicle.log.contract'].search_read(
             [('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [
                 self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
+                self.env.ref('maintenance_request.fleet_service_type_leasing').id,
                 self.env.ref('maintenance_request.fleet_service_type_proprieta').id])])  # 11,45
         riparazione = self.env['fleet.vehicle.log.contract'].search_read(
             [('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [
                 self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
+                self.env.ref('maintenance_request.fleet_service_type_leasing').id,
                 self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
                 self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id])])  # 11,45,46
         bloccati = self.env['fleet.vehicle.log.services'].search_read(
@@ -135,6 +140,7 @@ class FleetVehicle(models.Model):
         in_riparazione = self.env['fleet.vehicle.log.contract'].search_read(
             [('vehicle_id.id', '=', vehicle.id), ('state', '=', 'open'), ('cost_subtype_id.id', 'in', [
                 self.env.ref('maintenance_request.fleet_service_type_noleggio').id,
+                self.env.ref('maintenance_request.fleet_service_type_leasing').id,
                 self.env.ref('maintenance_request.fleet_service_type_proprieta').id,
                 self.env.ref('maintenance_request.fleet_service_type_noleggio_scorta').id,
                 self.env.ref('maintenance_request.fleet_service_type_disponibilita_mezzo').id])])  # 11,45,46,47
